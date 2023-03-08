@@ -1,7 +1,6 @@
-import axios from 'axios';
 import { createAsyncThunk } from '@reduxjs/toolkit';
-
-axios.defaults.baseURL = 'https://63fe2e6cc5c800a7237cb199.mockapi.io';
+import axios from 'axios';
+import { toast } from 'react-hot-toast';
 
 export const fetchContact = createAsyncThunk(
   'contacts/fetchAll',
@@ -10,30 +9,34 @@ export const fetchContact = createAsyncThunk(
       const response = await axios.get('/contacts');
       return response.data;
     } catch (e) {
+      toast.error('Something was wrong!');
       return thunkAPI.rejectWithValue(e.message);
     }
   }
 );
-
-export const addContacts = createAsyncThunk(
-  'contacts/addContact',
-  async ({ name, phone }, thunkAPI) => {
+export const addContact = createAsyncThunk(
+  'contacts/addTask',
+  async ({ name, number }, thunkAPI) => {
     try {
-      const response = await axios.post('/contacts', { name, phone });
+      const response = await axios.post('/contacts', { name, number });
+      toast.success('Successfull added');
       return response.data;
     } catch (e) {
+      toast.error('Something was wrong!');
       return thunkAPI.rejectWithValue(e.message);
     }
   }
 );
 
-export const deleteContacts = createAsyncThunk(
-  'contacts/deleteContacts',
+export const deleteContact = createAsyncThunk(
+  'contacts/deleteTask',
   async (taskId, thunkAPI) => {
     try {
       const response = await axios.delete(`/contacts/${taskId}`);
+      toast.success('Contact is deleted');
       return response.data;
     } catch (e) {
+      toast.error('Something was wrong!');
       return thunkAPI.rejectWithValue(e.message);
     }
   }
