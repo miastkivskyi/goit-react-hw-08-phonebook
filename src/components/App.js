@@ -1,4 +1,4 @@
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, Navigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { useEffect, lazy } from 'react';
 import { refreshUser } from 'redux/auth/operations';
@@ -47,6 +47,7 @@ const App = () => {
             }
           />
         </Route>
+        <Route path="*" element={<Navigate to="/" replace={true} />} />
       </Routes>
     )
   );

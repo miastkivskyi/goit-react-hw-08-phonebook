@@ -20,12 +20,16 @@ export const register = createAsyncThunk(
       const r = await axios.post('/users/signup', credentials);
       token.set(r.data.token);
       return r.data;
-    } catch (error) {
-      toast.error('This user is already registered.');
-      return thunkAPI.rejectWithValue(error.message);
+    } catch ({ response: { status } }) {
+      return thunkAPI.rejectWithValue(
+        status === 400
+          ? toast.error('This email already registered.')
+          : 'server connection error'
+      );
     }
   }
 );
+
 export const logIn = createAsyncThunk(
   'auth/login',
   async (credentials, thunkAPI) => {
@@ -33,18 +37,25 @@ export const logIn = createAsyncThunk(
       const r = await axios.post('/users/login', credentials);
       token.set(r.data.token);
       return r.data;
-    } catch (error) {
-      toast.error('Password is incorrect.');
-      return thunkAPI.rejectWithValue(error.message);
+    } catch ({ response: { status } }) {
+      return thunkAPI.rejectWithValue(
+        status === 400
+          ? toast.error('Password or email is incorrect.')
+          : 'server connection error'
+      );
     }
   }
 );
 
-export const logOut = createAsyncThunk('auth/logout', async () => {
+export const logOut = createAsyncThunk('auth/logout', async (_, thunkAPI) => {
   try {
     await axios.post('/users/logout');
     token.unset();
-  } catch (error) {}
+  } catch ({ response: { status } }) {
+    return thunkAPI.rejectWithValue(
+      status === 500 ? toast.error('Logout error') : 'Server error.'
+    );
+  }
 });
 
 export const refreshUser = createAsyncThunk(

@@ -19,18 +19,12 @@ const RegisterForm = () => {
   const handleSubmit = e => {
     e.preventDefault();
     dispatch(register({ name, email, password }));
-    reset();
-  };
-  const reset = () => {
-    setName('');
-    setEmail('');
-    setPassword('');
   };
 
   const handleClickShowPassword = () => setShowPassword(show => !show);
 
   const handleMouseDownPassword = event => {
-    event.reventDefault();
+    event.preventDefault();
   };
 
   return (

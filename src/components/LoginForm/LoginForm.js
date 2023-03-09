@@ -18,11 +18,6 @@ const LoginForm = () => {
   const handleSubmit = e => {
     e.preventDefault();
     dispatch(logIn({ email, password }));
-    reset();
-  };
-  const reset = () => {
-    setEmail('');
-    setPassword('');
   };
 
   const handleClickShowPassword = () => setShowPassword(show => !show);
